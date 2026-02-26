@@ -1,3 +1,48 @@
+# Apollo — Custom OpenClaw Fork
+
+This is a private fork of [openclaw/openclaw](https://github.com/openclaw/openclaw) running on a Raspberry Pi via Docker.
+
+## Repo Setup
+
+- **origin** → `git@github.com:quintusr/openclaw.git` (this fork)
+- **upstream** → `https://github.com/openclaw/openclaw.git` (upstream)
+
+Custom files in this fork:
+- `docker-compose.yml` — custom env vars, volume mounts, API keys
+- `.env` — local secrets (gitignored)
+- `apollo_avatar.png` — avatar image
+
+## Pull Latest Upstream Updates
+
+```bash
+cd /home/pi/repos/openclaw
+git fetch upstream
+git merge upstream/main
+git push origin main
+```
+
+## Rebuild & Restart
+
+```bash
+docker build -t openclaw:local .
+docker compose restart openclaw-gateway
+```
+
+## Run CLI Commands
+
+Since OpenClaw runs in Docker, CLI commands use:
+```bash
+docker compose exec openclaw-gateway node dist/index.js <command>
+```
+
+For example:
+```bash
+docker compose exec openclaw-gateway node dist/index.js doctor
+docker compose exec openclaw-gateway node dist/index.js onboard --help
+```
+
+---
+
 # 🦞 OpenClaw — Personal AI Assistant
 
 <p align="center">
