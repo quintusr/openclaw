@@ -45,7 +45,7 @@ RUN NODE_OPTIONS=--max-old-space-size=2048 pnpm install --frozen-lockfile
 # Adds ~300MB but eliminates the 60-90s Playwright install on every container start.
 # Must run after pnpm install so playwright-core is available in node_modules.
 USER root
-ARG OPENCLAW_INSTALL_BROWSER=""
+ARG OPENCLAW_INSTALL_BROWSER=1
 RUN if [ -n "$OPENCLAW_INSTALL_BROWSER" ]; then \
       apt-get update && \
       DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends xvfb && \
@@ -88,6 +88,19 @@ RUN if [ -n "$OPENCLAW_INSTALL_DOCKER_CLI" ]; then \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*; \
     fi
+
+# Pi-specific: install Python tools for agent skills
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3-pip && \
+    pip3 install --no-cache-dir --break-system-packages \
+        groq \
+        numpy \
+        plotly \
+        svtplay-dl \
+        pdfminer.six \
+        yt-dlp && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 USER node
 COPY --chown=node:node . .
