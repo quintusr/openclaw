@@ -212,6 +212,7 @@ RUN apt-get update && \
         plotly \
         svtplay-dl \
         pdfminer.six \
+        pillow \
         yt-dlp && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
